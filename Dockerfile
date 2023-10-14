@@ -3,6 +3,6 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 FROM openjdk:17
-COPY --from=build /target/flowerista-be-0.0.1-SNAPSHOT.jar flowerista-be.jar
+COPY --from=build /target/flowerista-shop-0.0.1-SNAPSHOT.jar flowerista-shop.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","flowerista-be.jar"]
+ENTRYPOINT ["java","-jar","flowerista-shop.jar"]
