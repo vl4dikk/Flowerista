@@ -5,7 +5,6 @@
 .settings/
 HELP.md
 .mvn/
-target/
 *.log
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
