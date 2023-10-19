@@ -26,7 +26,7 @@ public class Bouquete {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int bouqueteId;
 	@OneToOne
-	@JoinColumn(name = "flower_id")
+	@JoinColumn(name = "flower_name", referencedColumnName = "name")
 	private Flower flower;
 	@Column(name = "itemcode", nullable = true, unique = true)
 	@Min(value = 1)
