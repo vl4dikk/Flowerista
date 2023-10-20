@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class FlowerDto {
+public class ColorDto {
 
 	private int id;
 	private String name;

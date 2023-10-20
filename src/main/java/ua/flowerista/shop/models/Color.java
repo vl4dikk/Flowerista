@@ -15,9 +15,9 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "flowers")
+@Table(name = "colors")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Flower {
+public class Color {
 
 	@Column(name = "id")
 	@Id
@@ -29,5 +29,4 @@ public class Flower {
 	@ManyToOne
 	@JoinColumn(name = "bouquete_id", nullable = false)
 	private Bouquete bouquete;
-
 }

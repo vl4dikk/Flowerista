@@ -11,7 +11,7 @@ public class FlowerMapper implements EntityMapper<Flower, FlowerDto> {
 	@Override
 	public Flower toEntity(FlowerDto dto) {
 		Flower entity = new Flower();
-		entity.setFlowerId(dto.getFlowerId());
+		entity.setId(dto.getId());
 		entity.setName(dto.getName());
 		return entity;
 	}
@@ -19,7 +19,7 @@ public class FlowerMapper implements EntityMapper<Flower, FlowerDto> {
 	@Override
 	public FlowerDto toDto(Flower entity) {
 		FlowerDto dto = new FlowerDto();
-		dto.setFlowerId(entity.getFlowerId());
+		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		return dto;
 	}

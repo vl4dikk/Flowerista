@@ -1,5 +1,7 @@
 package ua.flowerista.shop.dto;
 
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +13,9 @@ import lombok.Setter;
 @Setter
 public class BouqueteDto {
 
-	private int bouqueteId;
-	private String flower;
+	private int id;
+	private Set<FlowerDto> flowers;
+	private Set<ColorDto> colors;
 	private String itemCode;
 	private String name;
 	private int defaultPrice;
