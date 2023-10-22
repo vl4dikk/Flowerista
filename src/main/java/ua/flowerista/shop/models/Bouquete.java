@@ -7,14 +7,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -26,29 +29,29 @@ public class Bouquete {
 
 	@Column(name = "id")
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@OneToMany(cascade = { CascadeType.REFRESH }, mappedBy = "bouquete")
-	@JoinColumn(name = "flower_name", referencedColumnName = "name")
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+	@JoinTable(name = "bouquete_flower", joinColumns = @JoinColumn(name = "bouquete_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "flower_id"))
 	private Set<Flower> flowers;
-	@OneToMany(cascade = { CascadeType.REFRESH }, mappedBy = "bouquete")
-	@JoinColumn(name = "color_name", referencedColumnName = "name")
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+	@JoinTable(name = "bouquete_color", joinColumns = @JoinColumn(name = "bouquete_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "color_id"))
 	private Set<Color> colors;
-	@Column(name = "itemcode", nullable = true, unique = true)
-	@Min(value = 1)
+	@Column(name = "itemcode", nullable = false, unique = true)
+	@NotBlank
 	private String itemCode;
-	@Column(name = "name", nullable = true, unique = true)
-	@Min(value = 1)
+	@Column(name = "name", nullable = false, unique = true)
+	@NotBlank
 	private String name;
 	@Column(name = "defaultprice")
 	@NotNull
 	private int defaultPrice;
 	@Column(name = "discount")
-	private int discount;
+	private Integer discount;
 	@Column(name = "discountprice")
-	private int discountPrice;
-	@Enumerated
-	@Column(name = "size")
+	private Integer discountPrice;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "size", nullable = true)
 	private Size size;
 	@Column(name = "quantity")
 	private int quantity;
