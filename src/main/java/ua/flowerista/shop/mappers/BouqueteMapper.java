@@ -1,5 +1,6 @@
 package ua.flowerista.shop.mappers;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class BouqueteMapper implements EntityMapper<Bouquete, BouqueteDto> {
 		entity.setItemCode(dto.getItemCode());
 		entity.setName(dto.getName());
 		entity.setQuantity(dto.getQuantity());
-		entity.setSize(Size.valueOf(dto.getSize().toUpperCase().trim()));
+		entity.setSize(Optional.ofNullable(Size.valueOf(dto.getSize().toUpperCase().trim())).orElse(null));
 		entity.setSoldQuantity(dto.getSoldQuantity());
 		return entity;
 	}
@@ -54,7 +55,7 @@ public class BouqueteMapper implements EntityMapper<Bouquete, BouqueteDto> {
 		dto.setItemCode(entity.getItemCode());
 		dto.setName(entity.getName());
 		dto.setQuantity(entity.getQuantity());
-		dto.setSize(entity.getSize().toString());
+		dto.setSize(Optional.ofNullable(entity.getSize()).map(Object::toString).orElse(null));
 		dto.setSoldQuantity(entity.getSoldQuantity());
 		return dto;
 	}

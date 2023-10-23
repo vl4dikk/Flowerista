@@ -13,7 +13,7 @@ public interface BouqueteRepository extends JpaRepository<Bouquete, Integer> {
 	
     List<Bouquete> findTop5ByOrderBySoldQuantityDesc();
     
-    @Query("SELECT b FROM Bouquete b WHERE b.discount IS NOT NULL ORDER BY b.discount DESC")
+    @Query("SELECT b FROM Bouquete b WHERE b.discount IS NOT NULL ORDER BY b.discount DESC LIMIT 5")
     List<Bouquete> findTop5ByOrderByDiscountDesc();
 
 }

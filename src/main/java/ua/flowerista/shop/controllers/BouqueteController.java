@@ -25,9 +25,17 @@ public class BouqueteController {
 	private BouqueteService service;
 	
 	@GetMapping("/bs")
-	@Operation(summary = "Get bestsellers", description = "")
+	@Operation(summary = "Get bestsellers", description = "Returns list (5 units) of bestsellers")
 	public ResponseEntity<CollectionModel<EntityModel<BouqueteDto>>> getBouqueteBestSellers() {
 		List<EntityModel<BouqueteDto>> bouquetesModels = service.getBouquetesBestSellers().stream().map(bouquete -> EntityModel.of(bouquete)).collect(Collectors.toList());
+		CollectionModel<EntityModel<BouqueteDto>> collectionModel = CollectionModel.of(bouquetesModels);
+		return ResponseEntity.ok(collectionModel);
+	}
+	
+	@GetMapping("/ts")
+	@Operation(summary = "Get topsales", description = "Returns list (5 units) of topsales")
+	public ResponseEntity<CollectionModel<EntityModel<BouqueteDto>>> getBouqueteTopSales() {
+		List<EntityModel<BouqueteDto>> bouquetesModels = service.getBouquetesTop5Sales().stream().map(bouquete -> EntityModel.of(bouquete)).collect(Collectors.toList());
 		CollectionModel<EntityModel<BouqueteDto>> collectionModel = CollectionModel.of(bouquetesModels);
 		return ResponseEntity.ok(collectionModel);
 	}

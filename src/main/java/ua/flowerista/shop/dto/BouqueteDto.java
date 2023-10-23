@@ -19,8 +19,8 @@ public class BouqueteDto {
 	private String itemCode;
 	private String name;
 	private int defaultPrice;
-	private int discount;
-	private int discountPrice;
+	private Integer discount;
+	private Integer discountPrice;
 	private String size;
 	private int quantity;
 	private int soldQuantity;
