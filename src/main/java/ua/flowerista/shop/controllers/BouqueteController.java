@@ -9,11 +9,8 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import ua.flowerista.shop.dto.BouqueteDto;
@@ -42,11 +39,5 @@ public class BouqueteController {
 		CollectionModel<EntityModel<BouqueteDto>> collectionModel = CollectionModel.of(bouquetesModels);
 		return ResponseEntity.ok(collectionModel);
 	}
-	
-	@PostMapping("/addImage")
-	public ResponseEntity<Void> addImage(@RequestParam("file") List<MultipartFile> images) {
-		BouqueteDto dto = service.getBouqueteById(1);
-			service.insert(dto, images);
-		return ResponseEntity.ok().build();
-	}
+
 }
