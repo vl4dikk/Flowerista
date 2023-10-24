@@ -37,8 +37,9 @@ public class BouqueteMapper implements EntityMapper<Bouquete, BouqueteDto> {
 		entity.setItemCode(dto.getItemCode());
 		entity.setName(dto.getName());
 		entity.setQuantity(dto.getQuantity());
-		entity.setSize(Optional.ofNullable(Size.valueOf(dto.getSize().toUpperCase().trim())).orElse(null));
+		entity.setSize(dto.getSize() != null ? Size.valueOf(dto.getSize()) : null);
 		entity.setSoldQuantity(dto.getSoldQuantity());
+		entity.setImageUrls(dto.getImageUrls());
 		return entity;
 	}
 
@@ -56,6 +57,7 @@ public class BouqueteMapper implements EntityMapper<Bouquete, BouqueteDto> {
 		dto.setName(entity.getName());
 		dto.setQuantity(entity.getQuantity());
 		dto.setSize(Optional.ofNullable(entity.getSize()).map(Object::toString).orElse(null));
+		dto.setImageUrls(entity.getImageUrls());
 		dto.setSoldQuantity(entity.getSoldQuantity());
 		return dto;
 	}

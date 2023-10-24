@@ -1,5 +1,6 @@
 package ua.flowerista.shop.dto;
 
+import java.util.Map;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class BouqueteDto {
 	private Set<ColorDto> colors;
 	private String itemCode;
 	private String name;
+    private Map<Integer, String> imageUrls;
 	private int defaultPrice;
 	private Integer discount;
 	private Integer discountPrice;

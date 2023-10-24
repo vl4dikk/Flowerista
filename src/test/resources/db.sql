@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS public.bouquete
     discountprice integer,
     itemcode character varying(255) COLLATE pg_catalog."default",
     name character varying(255) COLLATE pg_catalog."default",
+    imageUrls jsonb,
     quantity integer,
     size character varying(255) COLLATE pg_catalog."default",
     soldquantity integer,

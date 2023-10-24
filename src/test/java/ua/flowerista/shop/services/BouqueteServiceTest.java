@@ -2,6 +2,7 @@ package ua.flowerista.shop.services;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -31,7 +32,7 @@ class BouqueteServiceTest {
 	void testInsert() {
 		BouqueteDto dto = new BouqueteDto();
 		Mockito.when(mapper.toEntity(any(BouqueteDto.class))).thenReturn(new Bouquete());
-		service.insert(dto);
+		service.insert(dto, anyList());
 		verify(repository, times(1)).save(any(Bouquete.class));
 		verify(mapper, times(1)).toEntity(any(BouqueteDto.class));
 	}

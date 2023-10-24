@@ -27,7 +27,7 @@ import ua.flowerista.shop.models.Bouquete;
 @TestPropertySource(locations = "classpath:application.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class BouqueteRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
-	
+
 	@Autowired
 	private BouqueteRepository repository;
 
@@ -51,80 +51,80 @@ class BouqueteRepositoryTest extends AbstractTransactionalJUnit4SpringContextTes
 		postgreSQLContainer.stop();
 	}
 
-    @Test
-    void testInsertBouquete() {
-        Bouquete expected = new Bouquete();
-        expected.setName("Spring Bouquet1");
-        expected.setDefaultPrice(50);
-        expected.setDiscount(10);
-        expected.setDiscountPrice(45);
-        expected.setItemCode("BQ005");
-        expected.setSize(null);
-        expected.setQuantity(20);
-        expected.setSoldQuantity(5);
+	@Test
+	void testInsertBouquete() {
+		Bouquete expected = new Bouquete();
+		expected.setName("Spring Bouquet1");
+		expected.setDefaultPrice(50);
+		expected.setDiscount(10);
+		expected.setDiscountPrice(45);
+		expected.setItemCode("BQ005");
+		expected.setSize(null);
+		expected.setQuantity(20);
+		expected.setSoldQuantity(5);
 
-        repository.save(expected);
+		repository.save(expected);
 
-        Bouquete actual = repository.getReferenceById(repository.findAll().size());
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getDefaultPrice(), actual.getDefaultPrice());
-        assertEquals(expected.getDiscount(), actual.getDiscount());
-        assertEquals(expected.getDiscountPrice(), actual.getDiscountPrice());
-        assertEquals(expected.getItemCode(), actual.getItemCode());
-        assertEquals(expected.getSize(), actual.getSize());
-        assertEquals(expected.getQuantity(), actual.getQuantity());
-        assertEquals(expected.getSoldQuantity(), actual.getSoldQuantity());
-    }
+		Bouquete actual = repository.getReferenceById(repository.findAll().size());
+		assertEquals(expected.getName(), actual.getName());
+		assertEquals(expected.getDefaultPrice(), actual.getDefaultPrice());
+		assertEquals(expected.getDiscount(), actual.getDiscount());
+		assertEquals(expected.getDiscountPrice(), actual.getDiscountPrice());
+		assertEquals(expected.getItemCode(), actual.getItemCode());
+		assertEquals(expected.getSize(), actual.getSize());
+		assertEquals(expected.getQuantity(), actual.getQuantity());
+		assertEquals(expected.getSoldQuantity(), actual.getSoldQuantity());
+	}
 
-    @Test
-    void testDeleteBouqueteById() {
-        List<Bouquete> bouquets = repository.findAll();
-        repository.deleteById(bouquets.get(1).getId());
+	@Test
+	void testDeleteBouqueteById() {
+		List<Bouquete> bouquets = repository.findAll();
+		repository.deleteById(bouquets.get(1).getId());
 
-        int expected = 2;
-        int actual = repository.findAll().size();
-        assertEquals(expected, actual);
-    }
+		int expected = 2;
+		int actual = repository.findAll().size();
+		assertEquals(expected, actual);
+	}
 
-    @Test
-    void testGetAllBouquetes() {
-        int expected = 3;
-        int actual = repository.findAll().size();
-        assertEquals(expected, actual);
-    }
+	@Test
+	void testGetAllBouquetes() {
+		int expected = 3;
+		int actual = repository.findAll().size();
+		assertEquals(expected, actual);
+	}
 
-    @Test
-    void testGetBouqueteById() {
-        Bouquete expected = repository.findAll().get(1);
-        Bouquete actual = repository.getReferenceById(repository.findAll().get(1).getId());
-        assertEquals(expected, actual);
-    }
+	@Test
+	void testGetBouqueteById() {
+		Bouquete expected = repository.findAll().get(1);
+		Bouquete actual = repository.getReferenceById(repository.findAll().get(1).getId());
+		assertEquals(expected, actual);
+	}
 
-    @Test
-    void testUpdateBouquete() {
-        Bouquete expected = repository.findAll().get(1);
-        int bouqueteId = expected.getId();
-        expected.setName("Updated Bouquet");
-        repository.save(expected);
+	@Test
+	void testUpdateBouquete() {
+		Bouquete expected = repository.findAll().get(1);
+		int bouqueteId = expected.getId();
+		expected.setName("Updated Bouquet");
+		repository.save(expected);
 
-        Bouquete actual = repository.getReferenceById(bouqueteId);
-        assertEquals(expected.getName(), actual.getName());
-    }
-    
-    @Test
-    void testFindTop5ByOrderBySoldQuantityDesc() {
-    	List<Bouquete> bouquetes = repository.findTop5ByOrderBySoldQuantityDesc();
-    	assertEquals(bouquetes.get(0).getSoldQuantity(), 8);
-    	assertEquals(bouquetes.get(1).getSoldQuantity(), 5);
-    	assertEquals(bouquetes.get(2).getSoldQuantity(), 2);  	
-    }
-    
-    @Test
-    void testFindTop5ByOrderByDiscountDesc() {
-    	List<Bouquete> bouquetes = repository.findTop5ByOrderByDiscountDesc();
-    	assertEquals(bouquetes.get(0).getDiscount(), 15);
-    	assertEquals(bouquetes.get(1).getDiscount(), 10);
-    	assertEquals(bouquetes.size(), 2);
-    }
+		Bouquete actual = repository.getReferenceById(bouqueteId);
+		assertEquals(expected.getName(), actual.getName());
+	}
+
+	@Test
+	void testFindTop5ByOrderBySoldQuantityDesc() {
+		List<Bouquete> bouquetes = repository.findTop5ByOrderBySoldQuantityDesc();
+		assertEquals(bouquetes.get(0).getSoldQuantity(), 8);
+		assertEquals(bouquetes.get(1).getSoldQuantity(), 5);
+		assertEquals(bouquetes.get(2).getSoldQuantity(), 2);
+	}
+
+	@Test
+	void testFindTop5ByOrderByDiscountDesc() {
+		List<Bouquete> bouquetes = repository.findTop5ByOrderByDiscountDesc();
+		assertEquals(bouquetes.get(0).getDiscount(), 15);
+		assertEquals(bouquetes.get(1).getDiscount(), 10);
+		assertEquals(bouquetes.size(), 2);
+	}
 
 }

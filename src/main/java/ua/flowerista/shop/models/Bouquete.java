@@ -1,9 +1,13 @@
 package ua.flowerista.shop.models;
 
+import java.util.Map;
 import java.util.Set;
+
+import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,6 +47,9 @@ public class Bouquete {
 	@Column(name = "name", nullable = false, unique = true)
 	@NotBlank
 	private String name;
+	@Type(JsonType.class)
+    @Column(columnDefinition = "jsonb")
+    private Map<Integer, String> imageUrls;
 	@Column(name = "defaultprice")
 	@NotNull
 	private int defaultPrice;
