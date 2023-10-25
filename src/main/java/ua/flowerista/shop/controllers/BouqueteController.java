@@ -1,11 +1,8 @@
 package ua.flowerista.shop.controllers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import ua.flowerista.shop.dto.BouqueteDto;
+import ua.flowerista.shop.dto.BouqueteSmallDto;
 import ua.flowerista.shop.services.BouqueteService;
 
 @RestController
@@ -26,18 +23,16 @@ public class BouqueteController {
 	
 	@GetMapping("/bs")
 	@Operation(summary = "Get bestsellers", description = "Returns list (5 units) of bestsellers")
-	public ResponseEntity<CollectionModel<EntityModel<BouqueteDto>>> getBouqueteBestSellers() {
-		List<EntityModel<BouqueteDto>> bouquetesModels = service.getBouquetesBestSellers().stream().map(bouquete -> EntityModel.of(bouquete)).collect(Collectors.toList());
-		CollectionModel<EntityModel<BouqueteDto>> collectionModel = CollectionModel.of(bouquetesModels);
-		return ResponseEntity.ok(collectionModel);
+	public ResponseEntity<List<BouqueteSmallDto>> getBouqueteBestSellers() {
+		List<BouqueteSmallDto> bouquetesModels = service.getBouquetesBestSellers();
+		return ResponseEntity.ok(bouquetesModels);
 	}
 	
 	@GetMapping("/ts")
 	@Operation(summary = "Get topsales", description = "Returns list (5 units) of topsales")
-	public ResponseEntity<CollectionModel<EntityModel<BouqueteDto>>> getBouqueteTopSales() {
-		List<EntityModel<BouqueteDto>> bouquetesModels = service.getBouquetesTop5Sales().stream().map(bouquete -> EntityModel.of(bouquete)).collect(Collectors.toList());
-		CollectionModel<EntityModel<BouqueteDto>> collectionModel = CollectionModel.of(bouquetesModels);
-		return ResponseEntity.ok(collectionModel);
+	public ResponseEntity<List<BouqueteSmallDto>> getBouqueteTopSales() {
+		List<BouqueteSmallDto> bouquetesModels = service.getBouquetesTop5Sales();
+		return ResponseEntity.ok(bouquetesModels);
 	}
 
 }

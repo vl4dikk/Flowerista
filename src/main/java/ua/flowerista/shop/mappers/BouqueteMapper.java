@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ua.flowerista.shop.dto.BouqueteDto;
+import ua.flowerista.shop.dto.BouqueteSmallDto;
 import ua.flowerista.shop.models.Bouquete;
 import ua.flowerista.shop.models.Size;
 
@@ -59,6 +60,17 @@ public class BouqueteMapper implements EntityMapper<Bouquete, BouqueteDto> {
 		dto.setSize(Optional.ofNullable(entity.getSize()).map(Object::toString).orElse(null));
 		dto.setImageUrls(entity.getImageUrls());
 		dto.setSoldQuantity(entity.getSoldQuantity());
+		return dto;
+	}
+	
+	public BouqueteSmallDto toSmallDto(Bouquete entity) {
+		BouqueteSmallDto dto = new BouqueteSmallDto();
+		dto.setId(entity.getId());
+		dto.setDefaultPrice(entity.getDefaultPrice());
+		dto.setDiscount(entity.getDiscount());
+		dto.setDiscountPrice(entity.getDiscountPrice());
+		dto.setName(entity.getName());
+		dto.setImageUrls(entity.getImageUrls());
 		return dto;
 	}
 

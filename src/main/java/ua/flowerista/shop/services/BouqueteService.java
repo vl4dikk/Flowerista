@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import ua.flowerista.shop.dto.BouqueteDto;
+import ua.flowerista.shop.dto.BouqueteSmallDto;
 import ua.flowerista.shop.mappers.BouqueteMapper;
 import ua.flowerista.shop.repo.BouqueteRepository;
 
@@ -64,13 +65,13 @@ public class BouqueteService {
 		repo.save(mapper.toEntity(dto));
 	}
 
-	public List<BouqueteDto> getBouquetesBestSellers() {
-		return repo.findTop5ByOrderBySoldQuantityDesc().stream().map(bouquete -> mapper.toDto(bouquete))
+	public List<BouqueteSmallDto> getBouquetesBestSellers() {
+		return repo.findTop5ByOrderBySoldQuantityDesc().stream().map(bouquete -> mapper.toSmallDto(bouquete))
 				.collect(Collectors.toList());
 	}
 
-	public List<BouqueteDto> getBouquetesTop5Sales() {
-		return repo.findTop5ByOrderByDiscountDesc().stream().map(bouquete -> mapper.toDto(bouquete))
+	public List<BouqueteSmallDto> getBouquetesTop5Sales() {
+		return repo.findTop5ByOrderByDiscountDesc().stream().map(bouquete -> mapper.toSmallDto(bouquete))
 				.collect(Collectors.toList());
 	}
 
