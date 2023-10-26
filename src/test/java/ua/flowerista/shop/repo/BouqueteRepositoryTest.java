@@ -2,6 +2,7 @@ package ua.flowerista.shop.repo;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.ClassRule;
@@ -10,6 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -125,6 +129,19 @@ class BouqueteRepositoryTest extends AbstractTransactionalJUnit4SpringContextTes
 		assertEquals(bouquetes.get(0).getDiscount(), 15);
 		assertEquals(bouquetes.get(1).getDiscount(), 10);
 		assertEquals(bouquetes.size(), 2);
+	}
+
+	@Test
+	void findByFilters() {
+		List<Integer> colorIds = new LinkedList<>();
+		colorIds.add(1);
+		Pageable pageable = PageRequest.of(0, 20);
+		Page<Bouquete> content = repository.findByFilters(null, colorIds, null, null, false, true, false, pageable);
+		List<Bouquete> bouquetes = content.getContent();
+		assertEquals(bouquetes.size(), 2);
+		assertEquals(bouquetes.get(0).getDefaultPrice(), 60);
+		assertEquals(bouquetes.get(1).getDefaultPrice(), 50);
+		assertEquals(bouquetes.get(0).getId(), 3);
 	}
 
 }

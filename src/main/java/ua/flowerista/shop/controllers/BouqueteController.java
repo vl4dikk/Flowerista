@@ -3,10 +3,12 @@ package ua.flowerista.shop.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +35,21 @@ public class BouqueteController {
 	public ResponseEntity<List<BouqueteSmallDto>> getBouqueteTopSales() {
 		List<BouqueteSmallDto> bouquetesModels = service.getBouquetesTop5Sales();
 		return ResponseEntity.ok(bouquetesModels);
+	}
+	
+	@GetMapping
+	@Operation(summary = "Get catalog with filters", description = "Returns page (20 units) of bouquetes filtered and sorted")
+	public ResponseEntity<Page<BouqueteSmallDto>> getBouqueteCatalog(@RequestParam(required = false) List<Integer> flowerIds,
+            @RequestParam(required = false) List<Integer> colorIds,
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice,
+            @RequestParam(defaultValue = "false") Boolean sortByNewest,
+            @RequestParam(defaultValue = "false") Boolean sortByPriceHighToLow,
+            @RequestParam(defaultValue = "false") Boolean sortByPriceLowToHigh,
+            @RequestParam(defaultValue = "1")int page){
+		
+		return ResponseEntity.ok(service.getBouquetesCatalogFiltered(flowerIds, colorIds, minPrice, maxPrice, sortByNewest, sortByPriceHighToLow, sortByPriceLowToHigh, page));
+		
 	}
 
 }

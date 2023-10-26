@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -73,6 +76,12 @@ public class BouqueteService {
 	public List<BouqueteSmallDto> getBouquetesTop5Sales() {
 		return repo.findTop5ByOrderByDiscountDesc().stream().map(bouquete -> mapper.toSmallDto(bouquete))
 				.collect(Collectors.toList());
+	}
+	
+	public Page<BouqueteSmallDto> getBouquetesCatalogFiltered (List<Integer> flowerIds, List<Integer> colorIds, Integer minPrice, Integer maxPrice, Boolean sortByNewest,Boolean sortByPriceHighToLow,Boolean sortByPriceLowToHigh, int page) {
+		Pageable pageable = PageRequest.of(page - 1, 20);
+		return repo.findByFilters(flowerIds, colorIds, minPrice, maxPrice, sortByNewest, sortByPriceHighToLow, sortByPriceLowToHigh, pageable).map(mapper::toSmallDto);
+		
 	}
 
 }
