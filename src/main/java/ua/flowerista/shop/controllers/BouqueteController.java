@@ -17,7 +17,7 @@ import ua.flowerista.shop.services.BouqueteService;
 
 @RestController
 @RequestMapping("/api/bouquete")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class BouqueteController {
 	
 	@Autowired

@@ -15,14 +15,14 @@ import ua.flowerista.shop.services.ColorService;
 
 @RestController
 @RequestMapping("/api/color")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class ColorController {
 	
 	@Autowired
 	ColorService service;
 	
 	@GetMapping
-	@CrossOrigin(origins = "*")
+	@CrossOrigin
 	@Operation(summary = "Get all collors", description = "Returns list of all colors")
 	public ResponseEntity<List<ColorDto>> getAllCollors() {
 		List<ColorDto> colors = service.getAllColors();
