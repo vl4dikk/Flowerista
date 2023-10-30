@@ -22,7 +22,6 @@ public class ColorController {
 	ColorService service;
 	
 	@GetMapping
-	@CrossOrigin
 	@Operation(summary = "Get all collors", description = "Returns list of all colors")
 	public ResponseEntity<List<ColorDto>> getAllCollors() {
 		List<ColorDto> colors = service.getAllColors();
