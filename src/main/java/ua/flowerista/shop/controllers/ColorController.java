@@ -15,7 +15,7 @@ import ua.flowerista.shop.services.ColorService;
 
 @RestController
 @RequestMapping("/api/color")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ColorController {
 	
 	@Autowired
