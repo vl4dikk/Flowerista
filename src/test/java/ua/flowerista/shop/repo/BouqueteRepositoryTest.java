@@ -143,5 +143,17 @@ class BouqueteRepositoryTest extends AbstractTransactionalJUnit4SpringContextTes
 		assertEquals(bouquetes.get(1).getDefaultPrice(), 50);
 		assertEquals(bouquetes.get(0).getId(), 3);
 	}
+	
+	@Test
+	void findMinPrice() {
+		Integer min = repository.findMinPrice();
+		assertEquals(40, min);
+	}
+	
+	@Test
+	void findMaxPrice() {
+		Integer max = repository.findMaxPrice();
+		assertEquals(51, max);
+	}
 
 }

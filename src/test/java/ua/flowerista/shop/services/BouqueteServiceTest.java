@@ -75,5 +75,12 @@ class BouqueteServiceTest {
 		service.getBouquetesTop5Sales();
 		verify(repository, times(1)).findTop5ByOrderByDiscountDesc();
 	}
+	
+	@Test
+	void testGetMinMaxPrices() {
+		service.getMinMaxPrices();
+		verify(repository, times(1)).findMaxPrice();
+		verify(repository, times(1)).findMinPrice();
+	}
 
 }

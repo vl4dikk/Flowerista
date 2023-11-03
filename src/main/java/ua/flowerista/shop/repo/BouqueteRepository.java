@@ -31,5 +31,11 @@ public interface BouqueteRepository extends JpaRepository<Bouquete, Integer> {
 			@Param("minPrice") Integer minPrice, @Param("maxPrice") Integer maxPrice,
 			@Param("sortByNewest") Boolean sortByNewest, @Param("sortByPriceHighToLow") Boolean sortByPriceHighToLow,
 			@Param("sortByPriceLowToHigh") Boolean sortByPriceLowToHigh, Pageable pageable);
+	
+    @Query("SELECT MIN(COALESCE(b.discountPrice, b.defaultPrice)) FROM Bouquete b")
+    Integer findMinPrice();
+
+    @Query("SELECT MAX(COALESCE(b.discountPrice, b.defaultPrice)) FROM Bouquete b")
+    Integer findMaxPrice();
 
 }

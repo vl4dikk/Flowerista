@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ua.flowerista.shop.dto.BouqueteDto;
 import ua.flowerista.shop.dto.BouqueteSmallDto;
+import ua.flowerista.shop.dto.PriceRangeDto;
 import ua.flowerista.shop.mappers.BouqueteMapper;
 import ua.flowerista.shop.repo.BouqueteRepository;
 
@@ -83,5 +84,12 @@ public class BouqueteService {
 		return repo.findByFilters(flowerIds, colorIds, minPrice, maxPrice, sortByNewest, sortByPriceHighToLow, sortByPriceLowToHigh, pageable).map(mapper::toSmallDto);
 		
 	}
+	
+    public PriceRangeDto getMinMaxPrices() {
+        Integer minPrice = repo.findMinPrice();
+        Integer maxPrice = repo.findMaxPrice();
+
+        return new PriceRangeDto(minPrice, maxPrice);
+    }
 
 }

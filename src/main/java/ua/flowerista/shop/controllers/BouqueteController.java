@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import ua.flowerista.shop.dto.BouqueteSmallDto;
+import ua.flowerista.shop.dto.PriceRangeDto;
 import ua.flowerista.shop.services.BouqueteService;
 
 @RestController
@@ -51,5 +52,12 @@ public class BouqueteController {
 		return ResponseEntity.ok(service.getBouquetesCatalogFiltered(flowerIds, colorIds, minPrice, maxPrice, sortByNewest, sortByPriceHighToLow, sortByPriceLowToHigh, page));
 		
 	}
+	
+    @GetMapping("/price-range")
+    @Operation(summary = "Get price range of bouquetes", description = "Returns 2 Integers with min and max price")
+    public ResponseEntity<PriceRangeDto> getPriceRange() {
+        PriceRangeDto priceRange = service.getMinMaxPrices();
+        return ResponseEntity.ok(priceRange);
+    }
 
 }
