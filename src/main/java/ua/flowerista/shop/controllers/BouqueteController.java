@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import ua.flowerista.shop.dto.BouqueteSmallDto;
 import ua.flowerista.shop.dto.PriceRangeDto;
 import ua.flowerista.shop.services.BouqueteService;
@@ -19,6 +20,7 @@ import ua.flowerista.shop.services.BouqueteService;
 @RestController
 @RequestMapping("/api/bouquete")
 @CrossOrigin(origins = "*")
+@Tag(name="Bouquete controller")
 public class BouqueteController {
 	
 	@Autowired

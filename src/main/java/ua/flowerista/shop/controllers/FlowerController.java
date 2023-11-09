@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import ua.flowerista.shop.dto.FlowerDto;
 import ua.flowerista.shop.services.FlowerService;
 
 @RestController
 @RequestMapping("/api/flower")
 @CrossOrigin
+@Tag(name="Flower controller")
 public class FlowerController {
 	
 	@Autowired

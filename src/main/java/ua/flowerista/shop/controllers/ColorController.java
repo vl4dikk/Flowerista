@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import ua.flowerista.shop.dto.ColorDto;
 import ua.flowerista.shop.services.ColorService;
 
 @RestController
 @RequestMapping("/api/color")
 @CrossOrigin
+@Tag(name="Color controller")
 public class ColorController {
 	
 	@Autowired
