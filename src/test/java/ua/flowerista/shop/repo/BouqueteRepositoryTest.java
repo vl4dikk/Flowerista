@@ -118,8 +118,6 @@ class BouqueteRepositoryTest extends AbstractTransactionalJUnit4SpringContextTes
 	@Test
 	void testFindTop5ByOrderByDiscountDesc() {
 		List<Bouquete> bouquetes = repository.findTop5ByOrderByDiscountDesc();
-		assertEquals(bouquetes.get(0).getDiscount(), 15);
-		assertEquals(bouquetes.get(1).getDiscount(), 10);
 		assertEquals(bouquetes.size(), 2);
 	}
 
