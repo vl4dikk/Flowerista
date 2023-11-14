@@ -18,6 +18,7 @@ import ua.flowerista.shop.dto.BouqueteDto;
 import ua.flowerista.shop.dto.ColorDto;
 import ua.flowerista.shop.dto.FlowerDto;
 import ua.flowerista.shop.models.Bouquete;
+import ua.flowerista.shop.models.BouqueteSize;
 import ua.flowerista.shop.models.Color;
 import ua.flowerista.shop.models.Flower;
 import ua.flowerista.shop.models.Size;
@@ -54,29 +55,29 @@ class BouqueteMapperTest {
 		colors.add(cDto1);
 		colors.add(cDto2);
 		
+		Set<BouqueteSize> sizes = new HashSet<>();
+		BouqueteSize size1 = new BouqueteSize();
+		size1.setId(1);
+		size1.setSize(Size.MEDIUM);
+		size1.setDefaultPrice(123);
 		
+		
+		dto.setSizes(sizes);
         dto.setId(1);
         dto.setFlowers(flowers);
         dto.setColors(colors);
         dto.setItemCode("ABC123");
         dto.setName("Sample Bouquet");
-        dto.setDefaultPrice(100);
-        dto.setDiscount(10);
-        dto.setDiscountPrice(90);
-        dto.setSize("medium");
         dto.setQuantity(50);
         dto.setSoldQuantity(20);
         
         Bouquete entity = mapper.toEntity(dto);
         
         assertEquals(dto.getId(), entity.getId());
-        assertEquals(dto.getDefaultPrice(), entity.getDefaultPrice());
-        assertEquals(dto.getDiscount(), entity.getDiscount());
-        assertEquals(dto.getDiscountPrice(), entity.getDiscountPrice());
+        assertEquals(dto.getSizes(), entity.getSizes());
         assertEquals(dto.getItemCode(), entity.getItemCode());
         assertEquals(dto.getName(), entity.getName());
         assertEquals(dto.getQuantity(), entity.getQuantity());
-        assertEquals(Size.MEDIUM, entity.getSize());
         assertEquals(dto.getSoldQuantity(), entity.getSoldQuantity());
         verify(cMapper, times(2)).toEntity(any(ColorDto.class));
         verify(fMapper, times(2)).toEntity(any(FlowerDto.class));
@@ -104,28 +105,28 @@ class BouqueteMapperTest {
 		colors.add(color1);
 		colors.add(color2);
 		
+		Set<BouqueteSize> sizes = new HashSet<>();
+		BouqueteSize size1 = new BouqueteSize();
+		size1.setId(1);
+		size1.setSize(Size.MEDIUM);
+		size1.setDefaultPrice(123);
+		
         entity.setId(1);
+        entity.setSizes(sizes);
         entity.setFlowers(flowers);
         entity.setColors(colors);
         entity.setItemCode("ABC123");
         entity.setName("Sample Bouquet");
-        entity.setDefaultPrice(100);
-        entity.setDiscount(10);
-        entity.setDiscountPrice(90);
-        entity.setSize(Size.MEDIUM);
         entity.setQuantity(50);
         entity.setSoldQuantity(20);
         
         BouqueteDto dto = mapper.toDto(entity);
         
         assertEquals(entity.getId(), dto.getId());
-        assertEquals(entity.getDefaultPrice(), dto.getDefaultPrice());
-        assertEquals(entity.getDiscount(), dto.getDiscount());
-        assertEquals(entity.getDiscountPrice(), dto.getDiscountPrice());
+        assertEquals(entity.getSizes(), dto.getSizes());
         assertEquals(entity.getItemCode(), dto.getItemCode());
         assertEquals(entity.getName(), dto.getName());
         assertEquals(entity.getQuantity(), dto.getQuantity());
-        assertEquals(entity.getSize().toString(), dto.getSize());
         assertEquals(entity.getSoldQuantity(), dto.getSoldQuantity());
         verify(cMapper, times(2)).toDto(any(Color.class));
         verify(fMapper, times(2)).toDto(any(Flower.class));

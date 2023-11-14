@@ -2,8 +2,10 @@ package ua.flowerista.shop.services;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +15,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.transaction.Transactional;
+import ua.flowerista.shop.dto.BouqueteCardDto;
 import ua.flowerista.shop.dto.BouqueteDto;
 import ua.flowerista.shop.dto.BouqueteSmallDto;
 import ua.flowerista.shop.dto.PriceRangeDto;
 import ua.flowerista.shop.mappers.BouqueteMapper;
+import ua.flowerista.shop.models.Bouquete;
+import ua.flowerista.shop.models.BouqueteSize;
+import ua.flowerista.shop.models.Size;
 import ua.flowerista.shop.repo.BouqueteRepository;
 
 @Service
+@Transactional
 public class BouqueteService {
 
 	private BouqueteRepository repo;
@@ -90,6 +98,35 @@ public class BouqueteService {
         Integer maxPrice = repo.findMaxPrice();
 
         return new PriceRangeDto(minPrice, maxPrice);
+    }
+    
+    public BouqueteCardDto getById (int id) {
+    	Bouquete entity = repo.getReferenceById(id);
+    	return mapper.toCardDto(entity);
+    }
+    
+    public void test () {
+    	Bouquete bouquete = new Bouquete();
+    	BouqueteSize sizeS = new BouqueteSize();
+    	sizeS.setSize(Size.SMALL);
+    	sizeS.setDefaultPrice(123);
+    	BouqueteSize sizeM = new BouqueteSize();
+    	sizeM.setSize(Size.MEDIUM);
+    	sizeM.setDefaultPrice(140);
+    	BouqueteSize sizeL = new BouqueteSize();
+    	sizeL.setSize(Size.LARGE);
+    	sizeL.setDefaultPrice(180);
+    	
+    	Set<BouqueteSize> sizes = new HashSet<>();
+    	sizes.add(sizeS);
+    	sizes.add(sizeM);
+    	sizes.add(sizeL);
+    	bouquete.setSizes(sizes);
+    	bouquete.setName("123");
+    	bouquete.setItemCode("BQ051");
+    	bouquete.setQuantity(12);
+    	bouquete.setSoldQuantity(13);
+    	repo.save(bouquete);
     }
 
 }

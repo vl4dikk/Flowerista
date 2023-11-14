@@ -8,21 +8,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ua.flowerista.shop.models.BouqueteSize;
+import ua.flowerista.shop.models.Flower;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class BouqueteDto {
-
+public class BouqueteCardDto {
+	
 	private int id;
-	private Set<FlowerDto> flowers;
-	private Set<ColorDto> colors;
-	private String itemCode;
 	private String name;
+	private String itemCode;
     private Map<Integer, String> imageUrls;
-	private Set<BouqueteSize> sizes;
-	private int quantity;
-	private int soldQuantity;
+    private Set<BouqueteSize> sizes;
+    private Set<Flower> flowers;
 
 }

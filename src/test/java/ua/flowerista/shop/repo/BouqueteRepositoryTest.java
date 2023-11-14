@@ -59,11 +59,7 @@ class BouqueteRepositoryTest extends AbstractTransactionalJUnit4SpringContextTes
 	void testInsertBouquete() {
 		Bouquete expected = new Bouquete();
 		expected.setName("Spring Bouquet1");
-		expected.setDefaultPrice(50);
-		expected.setDiscount(10);
-		expected.setDiscountPrice(45);
 		expected.setItemCode("BQ005");
-		expected.setSize(null);
 		expected.setQuantity(20);
 		expected.setSoldQuantity(5);
 
@@ -71,11 +67,7 @@ class BouqueteRepositoryTest extends AbstractTransactionalJUnit4SpringContextTes
 
 		Bouquete actual = repository.getReferenceById(repository.findAll().size());
 		assertEquals(expected.getName(), actual.getName());
-		assertEquals(expected.getDefaultPrice(), actual.getDefaultPrice());
-		assertEquals(expected.getDiscount(), actual.getDiscount());
-		assertEquals(expected.getDiscountPrice(), actual.getDiscountPrice());
 		assertEquals(expected.getItemCode(), actual.getItemCode());
-		assertEquals(expected.getSize(), actual.getSize());
 		assertEquals(expected.getQuantity(), actual.getQuantity());
 		assertEquals(expected.getSoldQuantity(), actual.getSoldQuantity());
 	}
@@ -139,8 +131,6 @@ class BouqueteRepositoryTest extends AbstractTransactionalJUnit4SpringContextTes
 		Page<Bouquete> content = repository.findByFilters(null, colorIds, null, null, false, true, false, pageable);
 		List<Bouquete> bouquetes = content.getContent();
 		assertEquals(bouquetes.size(), 2);
-		assertEquals(bouquetes.get(0).getDefaultPrice(), 60);
-		assertEquals(bouquetes.get(1).getDefaultPrice(), 50);
 		assertEquals(bouquetes.get(0).getId(), 3);
 	}
 	

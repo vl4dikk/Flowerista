@@ -1,14 +1,16 @@
 package ua.flowerista.shop.mappers;
 
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ua.flowerista.shop.dto.BouqueteCardDto;
 import ua.flowerista.shop.dto.BouqueteDto;
 import ua.flowerista.shop.dto.BouqueteSmallDto;
 import ua.flowerista.shop.models.Bouquete;
+import ua.flowerista.shop.models.BouqueteSize;
 import ua.flowerista.shop.models.Size;
 
 @Component
@@ -28,9 +30,7 @@ public class BouqueteMapper implements EntityMapper<Bouquete, BouqueteDto> {
 		Bouquete entity = new Bouquete();
 
 		entity.setId(dto.getId());
-		entity.setDefaultPrice(dto.getDefaultPrice());
-		entity.setDiscount(dto.getDiscount());
-		entity.setDiscountPrice(dto.getDiscountPrice());
+		entity.setSizes(dto.getSizes());
 		entity.setFlowers(dto.getFlowers().stream().map(flowerDto -> flowerMapper.toEntity(flowerDto))
 				.collect(Collectors.toSet()));
 		entity.setColors(
@@ -38,7 +38,6 @@ public class BouqueteMapper implements EntityMapper<Bouquete, BouqueteDto> {
 		entity.setItemCode(dto.getItemCode());
 		entity.setName(dto.getName());
 		entity.setQuantity(dto.getQuantity());
-		entity.setSize(dto.getSize() != null ? Size.valueOf(dto.getSize()) : null);
 		entity.setSoldQuantity(dto.getSoldQuantity());
 		entity.setImageUrls(dto.getImageUrls());
 		return entity;
@@ -48,30 +47,50 @@ public class BouqueteMapper implements EntityMapper<Bouquete, BouqueteDto> {
 	public BouqueteDto toDto(Bouquete entity) {
 		BouqueteDto dto = new BouqueteDto();
 		dto.setId(entity.getId());
-		dto.setDefaultPrice(entity.getDefaultPrice());
-		dto.setDiscount(entity.getDiscount());
-		dto.setDiscountPrice(entity.getDiscountPrice());
 		dto.setFlowers(
 				entity.getFlowers().stream().map(flower -> flowerMapper.toDto(flower)).collect(Collectors.toSet()));
 		dto.setColors(entity.getColors().stream().map(color -> colorMapper.toDto(color)).collect(Collectors.toSet()));
 		dto.setItemCode(entity.getItemCode());
 		dto.setName(entity.getName());
 		dto.setQuantity(entity.getQuantity());
-		dto.setSize(Optional.ofNullable(entity.getSize()).map(Object::toString).orElse(null));
 		dto.setImageUrls(entity.getImageUrls());
 		dto.setSoldQuantity(entity.getSoldQuantity());
+		dto.setSizes(entity.getSizes());
 		return dto;
 	}
-	
+
 	public BouqueteSmallDto toSmallDto(Bouquete entity) {
 		BouqueteSmallDto dto = new BouqueteSmallDto();
+		BouqueteSize size = findBouqueteSize(entity);
 		dto.setId(entity.getId());
-		dto.setDefaultPrice(entity.getDefaultPrice());
-		dto.setDiscount(entity.getDiscount());
-		dto.setDiscountPrice(entity.getDiscountPrice());
+		dto.setDefaultPrice(size.getDefaultPrice());
+		dto.setDiscount(size.getDiscount());
+		dto.setDiscountPrice(size.getDiscountPrice());
 		dto.setName(entity.getName());
 		dto.setImageUrls(entity.getImageUrls());
 		return dto;
 	}
+	
+	public BouqueteCardDto toCardDto(Bouquete entity) {
+		BouqueteCardDto dto = new BouqueteCardDto();
+		dto.setId(entity.getId());
+		dto.setFlowers(entity.getFlowers());
+		dto.setImageUrls(entity.getImageUrls());
+		dto.setItemCode(entity.getItemCode());
+		dto.setName(entity.getName());
+		dto.setSizes(entity.getSizes());
+		return dto;
+	}
+
+	private BouqueteSize findBouqueteSize(Bouquete bouquete) {
+		Set<BouqueteSize> sizes = bouquete.getSizes();
+		for (BouqueteSize bouqueteSize : sizes) {
+			if (bouqueteSize.getSize() == Size.MEDIUM) {
+				return bouqueteSize;
+			}
+		}
+		throw new RuntimeException("Size not found for Bouquete: " + Size.MEDIUM);
+	}
+	
 
 }

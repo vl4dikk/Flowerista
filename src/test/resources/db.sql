@@ -21,20 +21,26 @@ CREATE SEQUENCE IF NOT EXISTS public.flower_id_seq
 
 CREATE TABLE IF NOT EXISTS public.bouquete
 (
-    id integer NOT NULL DEFAULT nextval('bouquete_id_seq'::regclass),
-    defaultprice integer NOT NULL,
-    discount integer,
-    discountprice integer,
-    itemcode character varying(255) COLLATE pg_catalog."default",
-    name character varying(255) COLLATE pg_catalog."default",
-    imageUrls jsonb,
-    quantity integer,
-    size character varying(255) COLLATE pg_catalog."default",
-    soldquantity integer,
-    CONSTRAINT bouquete_pkey PRIMARY KEY (id),
-    CONSTRAINT uk_koe7o3qi2bawao29w4s2g04vh UNIQUE (itemcode),
-    CONSTRAINT uk_o9reytbtg4x0o1hyv82iek4ra UNIQUE (name),
-    CONSTRAINT bouquete_size_check CHECK (size::text = ANY (ARRAY['SMALL'::character varying, 'MEDIUM'::character varying, 'LARGE'::character varying]::text[]))
+    id SERIAL PRIMARY KEY,
+    itemcode VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    imageUrls JSONB,
+    quantity INTEGER,
+    soldquantity INTEGER
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS uk_koe7o3qi2bawao29w4s2g04vh ON public.bouquete (itemcode);
+CREATE UNIQUE INDEX IF NOT EXISTS uk_o9reytbtg4x0o1hyv82iek4ra ON public.bouquete (name);
+
+CREATE TABLE IF NOT EXISTS public.bouquete_size
+(
+    id SERIAL PRIMARY KEY,
+    bouquete_id INTEGER REFERENCES public.bouquete(id) ON DELETE CASCADE,
+    size VARCHAR(255) NOT NULL CHECK (size IN ('SMALL', 'MEDIUM', 'LARGE')),
+    defaultprice INTEGER NOT NULL,
+    discount INTEGER,
+    discountprice INTEGER,
+    CONSTRAINT uk_bouquete_size_bouquete_id_size UNIQUE (bouquete_id, size)
 );
 
 CREATE TABLE IF NOT EXISTS public.color

@@ -16,26 +16,29 @@ public interface BouqueteRepository extends JpaRepository<Bouquete, Integer> {
 
 	List<Bouquete> findTop5ByOrderBySoldQuantityDesc();
 
-	@Query("SELECT b FROM Bouquete b WHERE b.discount IS NOT NULL ORDER BY b.discount DESC LIMIT 5")
+	@Query("SELECT b FROM Bouquete b JOIN b.sizes bs WHERE bs.discount IS NOT NULL ORDER BY bs.discount DESC LIMIT 5")
 	List<Bouquete> findTop5ByOrderByDiscountDesc();
 
-	@Query("SELECT b FROM Bouquete b " + "WHERE "
-			+ "(:flowerIds IS NULL OR EXISTS (SELECT 1 FROM b.flowers flower WHERE flower.id IN :flowerIds)) AND "
-			+ "(:colorIds IS NULL OR EXISTS (SELECT 1 FROM b.colors color WHERE color.id IN :colorIds)) AND "
-			+ "(:minPrice IS NULL OR (b.discountPrice IS NOT NULL AND b.discountPrice >= :minPrice) OR (b.discountPrice IS NULL AND b.defaultPrice >= :minPrice)) AND "
-			+ "(:maxPrice IS NULL OR (b.discountPrice IS NOT NULL AND b.discountPrice <= :maxPrice) OR (b.discountPrice IS NULL AND b.defaultPrice <= :maxPrice)) "
-			+ "ORDER BY " + "CASE WHEN :sortByNewest = true THEN b.id END DESC, "
-		    + "CASE WHEN :sortByPriceHighToLow = true THEN COALESCE(b.discountPrice, b.defaultPrice) END DESC, "
-		    + "CASE WHEN :sortByPriceLowToHigh = true THEN COALESCE(b.discountPrice, b.defaultPrice) END ASC")
+	@Query("SELECT DISTINCT b FROM Bouquete b " +
+		       "LEFT JOIN FETCH b.sizes bs " +
+		       "WHERE " +
+		       "(:flowerIds IS NULL OR EXISTS (SELECT 1 FROM b.flowers flower WHERE flower.id IN :flowerIds)) AND " +
+		       "(:colorIds IS NULL OR EXISTS (SELECT 1 FROM b.colors color WHERE color.id IN :colorIds)) AND " +
+		       "(:minPrice IS NULL OR (bs.size = 'MEDIUM' AND COALESCE(bs.discountPrice, bs.defaultPrice) >= :minPrice) OR bs IS NULL) AND " +
+		       "(:maxPrice IS NULL OR (bs.size = 'MEDIUM' AND COALESCE(bs.discountPrice, bs.defaultPrice) <= :maxPrice) OR bs IS NULL) " +
+		       "ORDER BY " +
+		       "CASE WHEN :sortByNewest = true THEN b.id END DESC, " +
+		       "CASE WHEN :sortByPriceHighToLow = true AND bs.size = 'MEDIUM' THEN COALESCE(bs.discountPrice, bs.defaultPrice) END DESC, " +
+		       "CASE WHEN :sortByPriceLowToHigh = true AND bs.size = 'MEDIUM' THEN COALESCE(bs.discountPrice, bs.defaultPrice) END ASC")
 	Page<Bouquete> findByFilters(@Param("flowerIds") List<Integer> flowerIds, @Param("colorIds") List<Integer> colorIds,
 			@Param("minPrice") Integer minPrice, @Param("maxPrice") Integer maxPrice,
 			@Param("sortByNewest") Boolean sortByNewest, @Param("sortByPriceHighToLow") Boolean sortByPriceHighToLow,
 			@Param("sortByPriceLowToHigh") Boolean sortByPriceLowToHigh, Pageable pageable);
-	
-    @Query("SELECT MIN(COALESCE(b.discountPrice, b.defaultPrice)) FROM Bouquete b")
-    Integer findMinPrice();
 
-    @Query("SELECT MAX(COALESCE(b.discountPrice, b.defaultPrice)) FROM Bouquete b")
-    Integer findMaxPrice();
+	@Query("SELECT MIN(COALESCE(bs.discountPrice, bs.defaultPrice)) FROM Bouquete b JOIN b.sizes bs WHERE bs.size = 'MEDIUM'")
+	Integer findMinPrice();
+
+	@Query("SELECT MAX(COALESCE(bs.discountPrice, bs.defaultPrice)) FROM Bouquete b JOIN b.sizes bs WHERE bs.size = 'MEDIUM'")
+	Integer findMaxPrice();
 
 }
