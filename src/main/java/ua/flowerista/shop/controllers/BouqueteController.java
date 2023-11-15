@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.transaction.Transactional;
 import ua.flowerista.shop.dto.BouqueteCardDto;
 import ua.flowerista.shop.dto.BouqueteSmallDto;
 import ua.flowerista.shop.dto.PriceRangeDto;
@@ -67,7 +68,13 @@ public class BouqueteController {
 	}
 
 	@GetMapping("/{id}")
-	@Transactional
+	@Operation(summary = "Get bouquete card dto by id", description = "Returns bouquete card dto")
+    @ApiResponses(value = {
+    		@ApiResponse(responseCode = "404",
+			description = "If bouquete was not found"),
+    		@ApiResponse(responseCode = "200",
+			description = "If bouquete was found")
+    })
 	public ResponseEntity<BouqueteCardDto> getById(@PathVariable("id") int id) {
 
 		BouqueteCardDto dto = service.getById(id);
