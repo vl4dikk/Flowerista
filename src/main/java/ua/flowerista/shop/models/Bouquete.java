@@ -1,10 +1,11 @@
 package ua.flowerista.shop.models;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.annotations.Type;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.CascadeType;
@@ -21,10 +22,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
+@ToString
 @Entity
 @Table(name = "bouquete")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Bouquete {
 
 	@Column(name = "id")
@@ -48,8 +53,9 @@ public class Bouquete {
 	@Type(JsonType.class)
 	@Column(columnDefinition = "jsonb")
 	private Map<Integer, String> imageUrls;
-    @OneToMany(mappedBy = "bouquete", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<BouqueteSize> sizes = new HashSet<>();
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "bouquete")
+    private Set<BouqueteSize> sizes;
 	@Column(name = "quantity")
 	private int quantity;
 	@Column(name = "soldquantity")

@@ -101,8 +101,7 @@ public class BouqueteService {
     }
     
     public BouqueteCardDto getById (int id) {
-    	Bouquete entity = repo.getReferenceById(id);
-    	return mapper.toCardDto(entity);
+    	return mapper.toCardDto(repo.getReferenceById(id));
     }
     
     public void test () {

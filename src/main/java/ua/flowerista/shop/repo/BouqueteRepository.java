@@ -19,17 +19,14 @@ public interface BouqueteRepository extends JpaRepository<Bouquete, Integer> {
 	@Query("SELECT b FROM Bouquete b JOIN b.sizes bs WHERE bs.discount IS NOT NULL ORDER BY bs.discount DESC LIMIT 5")
 	List<Bouquete> findTop5ByOrderByDiscountDesc();
 
-	@Query("SELECT DISTINCT b FROM Bouquete b " +
-		       "LEFT JOIN FETCH b.sizes bs " +
-		       "WHERE " +
-		       "(:flowerIds IS NULL OR EXISTS (SELECT 1 FROM b.flowers flower WHERE flower.id IN :flowerIds)) AND " +
-		       "(:colorIds IS NULL OR EXISTS (SELECT 1 FROM b.colors color WHERE color.id IN :colorIds)) AND " +
-		       "(:minPrice IS NULL OR (bs.size = 'MEDIUM' AND COALESCE(bs.discountPrice, bs.defaultPrice) >= :minPrice) OR bs IS NULL) AND " +
-		       "(:maxPrice IS NULL OR (bs.size = 'MEDIUM' AND COALESCE(bs.discountPrice, bs.defaultPrice) <= :maxPrice) OR bs IS NULL) " +
-		       "ORDER BY " +
-		       "CASE WHEN :sortByNewest = true THEN b.id END DESC, " +
-		       "CASE WHEN :sortByPriceHighToLow = true AND bs.size = 'MEDIUM' THEN COALESCE(bs.discountPrice, bs.defaultPrice) END DESC, " +
-		       "CASE WHEN :sortByPriceLowToHigh = true AND bs.size = 'MEDIUM' THEN COALESCE(bs.discountPrice, bs.defaultPrice) END ASC")
+	@Query("SELECT DISTINCT b FROM Bouquete b " + "LEFT JOIN FETCH b.sizes bs " + "WHERE "
+			+ "(:flowerIds IS NULL OR EXISTS (SELECT 1 FROM b.flowers flower WHERE flower.id IN :flowerIds)) AND "
+			+ "(:colorIds IS NULL OR EXISTS (SELECT 1 FROM b.colors color WHERE color.id IN :colorIds)) AND "
+			+ "(:minPrice IS NULL OR (bs.size = 'MEDIUM' AND COALESCE(bs.discountPrice, bs.defaultPrice) >= :minPrice) OR bs IS NULL) AND "
+			+ "(:maxPrice IS NULL OR (bs.size = 'MEDIUM' AND COALESCE(bs.discountPrice, bs.defaultPrice) <= :maxPrice) OR bs IS NULL) "
+			+ "ORDER BY " + "CASE WHEN :sortByNewest = true THEN b.id END DESC, "
+			+ "CASE WHEN :sortByPriceHighToLow = true AND bs.size = 'MEDIUM' THEN COALESCE(bs.discountPrice, bs.defaultPrice) END DESC, "
+			+ "CASE WHEN :sortByPriceLowToHigh = true AND bs.size = 'MEDIUM' THEN COALESCE(bs.discountPrice, bs.defaultPrice) END ASC")
 	Page<Bouquete> findByFilters(@Param("flowerIds") List<Integer> flowerIds, @Param("colorIds") List<Integer> colorIds,
 			@Param("minPrice") Integer minPrice, @Param("maxPrice") Integer maxPrice,
 			@Param("sortByNewest") Boolean sortByNewest, @Param("sortByPriceHighToLow") Boolean sortByPriceHighToLow,
@@ -40,5 +37,8 @@ public interface BouqueteRepository extends JpaRepository<Bouquete, Integer> {
 
 	@Query("SELECT MAX(COALESCE(bs.discountPrice, bs.defaultPrice)) FROM Bouquete b JOIN b.sizes bs WHERE bs.size = 'MEDIUM'")
 	Integer findMaxPrice();
+
+	@Query("SELECT b FROM Bouquete b LEFT JOIN FETCH b.sizes WHERE b.id = :id")
+	Bouquete findById(@Param(value = "id") int id);
 
 }

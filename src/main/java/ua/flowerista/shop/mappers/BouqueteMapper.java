@@ -89,7 +89,7 @@ public class BouqueteMapper implements EntityMapper<Bouquete, BouqueteDto> {
 				return bouqueteSize;
 			}
 		}
-		throw new RuntimeException("Size not found for Bouquete: " + Size.MEDIUM);
+		throw new RuntimeException("Size not found for Bouquete: " + bouquete.getId());
 	}
 	
 
