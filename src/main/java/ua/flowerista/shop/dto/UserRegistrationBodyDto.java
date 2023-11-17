@@ -2,6 +2,7 @@ package ua.flowerista.shop.dto;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -18,14 +19,17 @@ public class UserRegistrationBodyDto {
 	@Size(min = 2, message = "Firstname is too short")
 	@Size(max = 50, message = "Firstname is too long")
 	@Pattern(regexp = "^\\p{L}*$", message = "Firstname should contain only alphabets")
+	@Pattern(regexp = "[A-Z].*", message = "Firstname must start with an uppercase letter")
 	private String firstName;
 
 	@Size(min = 2, message = "Lastname is too short")
 	@Size(max = 50, message = "Lastname is too long")
 	@Pattern(regexp = "^\\p{L}*$", message = "Lastname should contain only alphabets")
+	@Pattern(regexp = "[A-Z].*", message = "Lastname must start with an uppercase letter")
 	private String lastName;
 	@Email
 	private String email;
+	@Min(value = 100000000, message = "Phone number should have exactly 9 digits.")
 	@Digits(integer = 9, fraction = 0, message = "Phone number should have exactly 9 digits.")
 	private Integer phoneNumber;
 	@Pattern(

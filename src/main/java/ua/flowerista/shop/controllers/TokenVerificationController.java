@@ -17,12 +17,12 @@ public class TokenVerificationController {
 	public String registrationConfirm(@RequestParam("token") final String token) {
 		final String tokenValidated = service.validateVerificationToken(token);
 		if (tokenValidated.equals("invalidToken")) {
-			return "redirect://https://flowerista-frontend.vercel.app/";
+			return "redirect://flowerista-frontend.vercel.app/";
 		}
 		if (tokenValidated.equals("expired")) {
-			return "redirect://https://flowerista-frontend.vercel.app/";
+			return "redirect://flowerista-frontend.vercel.app/";
 		}
-		return "redirect://https://flowerista-frontend.vercel.app/login";
+		return "redirect://flowerista-frontend.vercel.app/login";
 	}
 
 }
