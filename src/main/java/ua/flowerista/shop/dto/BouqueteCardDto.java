@@ -22,5 +22,6 @@ public class BouqueteCardDto {
     private Map<Integer, String> imageUrls;
     private Set<BouqueteSize> sizes;
     private Set<Flower> flowers;
+    private int stockQuantity;
 
 }
