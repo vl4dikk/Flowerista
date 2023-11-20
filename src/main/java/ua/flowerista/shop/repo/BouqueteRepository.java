@@ -43,4 +43,7 @@ public interface BouqueteRepository extends JpaRepository<Bouquete, Integer> {
 	@Query("SELECT b FROM Bouquete b LEFT JOIN FETCH b.sizes WHERE b.id = :id")
 	Bouquete findById(@Param(value = "id") int id);
 
+	@Query("SELECT b FROM Bouquete b WHERE lower(b.name) LIKE lower(concat('%', :name, '%'))")
+	List<Bouquete> searchByName(@Param("name") String name);
+
 }

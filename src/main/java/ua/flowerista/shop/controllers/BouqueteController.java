@@ -83,5 +83,10 @@ public class BouqueteController {
 		}
 		return ResponseEntity.ok(dto);
 	}
+	
+    @GetMapping("/search")
+    public ResponseEntity<List<BouqueteSmallDto>> searchBouquetesByName(@RequestParam("name") String name) {
+        return ResponseEntity.ok(service.searchBouquetesByName(name));
+    }
 
 }

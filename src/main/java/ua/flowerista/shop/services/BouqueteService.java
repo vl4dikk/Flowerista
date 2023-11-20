@@ -104,6 +104,10 @@ public class BouqueteService {
     	return mapper.toCardDto(repo.getReferenceById(id));
     }
     
+    public List<BouqueteSmallDto> searchBouquetesByName(String name) {
+        return repo.searchByName(name).stream().map(boquete -> mapper.toSmallDto(boquete)).collect(Collectors.toList());
+    }
+    
     public void test () {
     	Bouquete bouquete = new Bouquete();
     	BouqueteSize sizeS = new BouqueteSize();
