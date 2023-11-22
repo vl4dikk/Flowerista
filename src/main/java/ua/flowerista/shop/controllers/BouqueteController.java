@@ -69,24 +69,20 @@ public class BouqueteController {
 
 	@GetMapping("/{id}")
 	@Operation(summary = "Get bouquete card dto by id", description = "Returns bouquete card dto")
-    @ApiResponses(value = {
-    		@ApiResponse(responseCode = "404",
-			description = "If bouquete was not found"),
-    		@ApiResponse(responseCode = "200",
-			description = "If bouquete was found")
-    })
+	@ApiResponses(value = { @ApiResponse(responseCode = "404", description = "If bouquete was not found"),
+			@ApiResponse(responseCode = "200", description = "If bouquete was found") })
 	public ResponseEntity<BouqueteCardDto> getById(@PathVariable("id") int id) {
-
 		BouqueteCardDto dto = service.getById(id);
 		if (dto == null) {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(dto);
 	}
-	
-    @GetMapping("/search")
-    public ResponseEntity<List<BouqueteSmallDto>> searchBouquetesByName(@RequestParam("name") String name) {
-        return ResponseEntity.ok(service.searchBouquetesByName(name));
-    }
+
+	@GetMapping("/search")
+	@Operation(summary = "Search bouquetes by names", description = "Returns empty list if in request was less than 3 symbols")
+	public ResponseEntity<List<BouqueteSmallDto>> searchBouquetesByName(@RequestParam("name") String name) {
+		return ResponseEntity.ok(service.searchBouquetesByName(name));
+	}
 
 }
