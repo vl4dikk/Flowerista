@@ -1,6 +1,7 @@
 package ua.flowerista.shop.services;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -105,6 +106,9 @@ public class BouqueteService {
     }
     
     public List<BouqueteSmallDto> searchBouquetesByName(String name) {
+        if (name == null || name.length() < 3) {
+            return Collections.emptyList();
+        }
         return repo.searchByName(name).stream().map(boquete -> mapper.toSmallDto(boquete)).collect(Collectors.toList());
     }
     
