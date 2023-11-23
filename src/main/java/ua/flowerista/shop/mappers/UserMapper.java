@@ -3,6 +3,7 @@ package ua.flowerista.shop.mappers;
 import org.springframework.stereotype.Component;
 
 import ua.flowerista.shop.dto.UserDto;
+import ua.flowerista.shop.dto.UserProfileDto;
 import ua.flowerista.shop.dto.UserRegistrationBodyDto;
 import ua.flowerista.shop.models.Role;
 import ua.flowerista.shop.models.User;
@@ -42,6 +43,15 @@ public class UserMapper implements EntityMapper<User, UserDto> {
 		user.setPassword(dto.getPassword());
 		user.setPhoneNumber(String.valueOf(dto.getPhoneNumber()));
 		return user;
+	}
+	
+	public UserProfileDto toProfileDto(User entity) {
+		UserProfileDto dto = new UserProfileDto();
+		dto.setEmail(entity.getEmail());
+		dto.setFirstName(entity.getFirstName());
+		dto.setLastName(entity.getLastName());
+		dto.setPhoneNumber(Integer.valueOf(entity.getPhoneNumber()));
+		return dto;
 	}
 
 }

@@ -1,5 +1,6 @@
 package ua.flowerista.shop.controllers;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Locale;
 import java.util.UUID;
@@ -27,11 +28,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import ua.flowerista.shop.dto.UserAuthenticationResponseDto;
+import ua.flowerista.shop.dto.UserLoginBodyDto;
 import ua.flowerista.shop.dto.UserPasswordResetDto;
 import ua.flowerista.shop.dto.UserRegistrationBodyDto;
 import ua.flowerista.shop.models.User;
 import ua.flowerista.shop.registration.OnRegistrationCompleteEvent;
+import ua.flowerista.shop.services.AuthenticationService;
 import ua.flowerista.shop.services.UserService;
 
 @RestController
@@ -42,6 +47,9 @@ public class AuthController {
 
 	@Autowired
 	private UserService service;
+	
+	@Autowired
+	private AuthenticationService authService;
 	
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -90,6 +98,23 @@ public class AuthController {
 		}
 		return ResponseEntity.ok(exists);
 	}
+	
+	  @PostMapping("/authenticate")
+	  @Operation(summary = "User login endpoint", description = "Returns refresh and access tokens")
+	  public ResponseEntity<UserAuthenticationResponseDto> authenticate(
+	      @RequestBody UserLoginBodyDto request
+	  ) {
+	    return ResponseEntity.ok(authService.authenticate(request));
+	  }
+	  
+	  @PostMapping("/refresh-token")
+	  @Operation(summary = "Api to refresh token", description = "Returns refreshed tokens")
+	  public void refreshToken(
+	      HttpServletRequest request,
+	      HttpServletResponse response
+	  ) throws IOException {
+	    authService.refreshToken(request, response);
+	  }
 	
 	@PostMapping("/registrationConfirm/{token}")
 	@Operation(summary = "Validating token", description = "If token is expired, deleting token and user")

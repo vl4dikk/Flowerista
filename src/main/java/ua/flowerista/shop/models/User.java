@@ -29,7 +29,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "\"user\"")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class User implements UserDetails{
+public class User implements UserDetails {
+
+	private static final long serialVersionUID = 1L;
 
 	@Column(name = "id")
 	@Id
@@ -47,16 +49,16 @@ public class User implements UserDetails{
 
 	@Column(name = "phone_number", nullable = false, unique = true, length = 9)
 	private String phoneNumber;
-	
+
 	@Column(name = "password", nullable = false, length = 1000)
 	private String password;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
 	private Role role;
-	
-    @Column(name = "enabled")
-    private boolean enabled;
+
+	@Column(name = "enabled")
+	private boolean enabled;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -87,6 +89,5 @@ public class User implements UserDetails{
 	public boolean isEnabled() {
 		return this.enabled;
 	}
-	
 
 }
