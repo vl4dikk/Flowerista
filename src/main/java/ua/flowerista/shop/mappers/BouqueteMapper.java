@@ -68,6 +68,7 @@ public class BouqueteMapper implements EntityMapper<Bouquete, BouqueteDto> {
 		dto.setDiscountPrice(size.getDiscountPrice());
 		dto.setName(entity.getName());
 		dto.setImageUrls(entity.getImageUrls());
+		dto.setSizes(entity.getSizes());
 		return dto;
 	}
 	
