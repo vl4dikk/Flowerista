@@ -2,9 +2,9 @@ package ua.flowerista.shop.mappers;
 
 import org.springframework.stereotype.Component;
 
-import ua.flowerista.shop.dto.UserDto;
-import ua.flowerista.shop.dto.UserProfileDto;
-import ua.flowerista.shop.dto.UserRegistrationBodyDto;
+import ua.flowerista.shop.dto.user.UserDto;
+import ua.flowerista.shop.dto.user.UserProfileDto;
+import ua.flowerista.shop.dto.user.UserRegistrationBodyDto;
 import ua.flowerista.shop.models.Role;
 import ua.flowerista.shop.models.User;
 

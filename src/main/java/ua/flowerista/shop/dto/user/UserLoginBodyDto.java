@@ -1,4 +1,4 @@
-package ua.flowerista.shop.dto;
+package ua.flowerista.shop.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;

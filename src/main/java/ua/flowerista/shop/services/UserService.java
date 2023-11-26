@@ -13,10 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-import ua.flowerista.shop.dto.UserLoginBodyDto;
-import ua.flowerista.shop.dto.UserPasswordResetDto;
-import ua.flowerista.shop.dto.UserProfileDto;
-import ua.flowerista.shop.dto.UserRegistrationBodyDto;
+import ua.flowerista.shop.dto.user.UserChangePasswordRequestDto;
+import ua.flowerista.shop.dto.user.UserLoginBodyDto;
+import ua.flowerista.shop.dto.user.UserPasswordResetDto;
+import ua.flowerista.shop.dto.user.UserProfileDto;
+import ua.flowerista.shop.dto.user.UserRegistrationBodyDto;
 import ua.flowerista.shop.exceptions.UserAlreadyExistException;
 import ua.flowerista.shop.mappers.UserMapper;
 import ua.flowerista.shop.models.PasswordResetToken;
@@ -156,10 +157,29 @@ public class UserService {
 
 	public UserProfileDto getUserDto(Principal connectedUser) {
 		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-		if(user != null) {
+		if (user != null) {
 			return mapper.toProfileDto(repository.findByEmail(user.getEmail()).get());
 		}
 		return new UserProfileDto();
+	}
+
+	public String changePassword(UserChangePasswordRequestDto request, Principal connectedUser) {
+
+		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+		if (request.getNewPassword() == null) {
+			return "New password cannot be null";
+		}
+		if (request.getCurrentPassword() == null) {
+			return "Current password cannot be null";
+		}
+
+		if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+			return "Wrong password";
+		}
+		user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+		repository.save(user);
+		return "Password changed";
 	}
 
 	private String validatePasswordResetToken(String token) {
