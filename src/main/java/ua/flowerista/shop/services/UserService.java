@@ -13,13 +13,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import ua.flowerista.shop.dto.AddressDto;
 import ua.flowerista.shop.dto.user.UserChangePasswordRequestDto;
+import ua.flowerista.shop.dto.user.UserChangePersonalInfoDto;
 import ua.flowerista.shop.dto.user.UserLoginBodyDto;
 import ua.flowerista.shop.dto.user.UserPasswordResetDto;
 import ua.flowerista.shop.dto.user.UserProfileDto;
 import ua.flowerista.shop.dto.user.UserRegistrationBodyDto;
 import ua.flowerista.shop.exceptions.UserAlreadyExistException;
+import ua.flowerista.shop.mappers.AddressMapper;
 import ua.flowerista.shop.mappers.UserMapper;
+import ua.flowerista.shop.models.Address;
 import ua.flowerista.shop.models.PasswordResetToken;
 import ua.flowerista.shop.models.Role;
 import ua.flowerista.shop.models.User;
@@ -37,6 +41,9 @@ public class UserService {
 
 	@Autowired
 	private UserMapper mapper;
+
+	@Autowired
+	private AddressMapper addressMapper;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -65,6 +72,7 @@ public class UserService {
 		User user = mapper.toEntity(regDto);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRole(Role.USER);
+		user.setAddress(new Address());
 		return repository.save(user);
 	}
 
@@ -180,6 +188,22 @@ public class UserService {
 
 		repository.save(user);
 		return "Password changed";
+	}
+
+	public void changeAddress(AddressDto address, Principal connectedUser) {
+		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+		Address addressEntity = addressMapper.toEntity(address);
+		addressEntity.setId(user.getAddress().getId());
+		user.setAddress(addressEntity);
+		repository.save(user);
+
+	}
+
+	public void changePersonalInfo(UserChangePersonalInfoDto dto, Principal connectedUser) {
+		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+		user.setFirstName(dto.getFirstName());
+		user.setLastName(dto.getLastName());
+		repository.save(user);
 	}
 
 	private String validatePasswordResetToken(String token) {

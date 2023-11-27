@@ -1,5 +1,6 @@
 package ua.flowerista.shop.mappers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ua.flowerista.shop.dto.user.UserDto;
@@ -10,6 +11,9 @@ import ua.flowerista.shop.models.User;
 
 @Component
 public class UserMapper implements EntityMapper<User, UserDto> {
+	
+	@Autowired
+	private AddressMapper addressMapper;
 
 	@Override
 	public User toEntity(UserDto dto) {
@@ -51,6 +55,7 @@ public class UserMapper implements EntityMapper<User, UserDto> {
 		dto.setFirstName(entity.getFirstName());
 		dto.setLastName(entity.getLastName());
 		dto.setPhoneNumber(Integer.valueOf(entity.getPhoneNumber()));
+		dto.setAddress(addressMapper.toDto(entity.getAddress()));
 		return dto;
 	}
 

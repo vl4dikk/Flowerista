@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ua.flowerista.shop.dto.AddressDto;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,5 +40,7 @@ public class UserProfileDto {
 
 	@Size(min = 9, max = 9, message = "Phone number should be exact 9 characters.")
 	private int phoneNumber;
+	
+	private AddressDto address;
 
 }
