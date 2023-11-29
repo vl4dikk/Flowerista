@@ -54,7 +54,7 @@ public class Bouquete {
 	@Column(columnDefinition = "jsonb")
 	private Map<Integer, String> imageUrls;
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "bouquete")
+    @OneToMany(mappedBy = "bouquete", fetch = FetchType.EAGER)
     private Set<BouqueteSize> sizes;
 	@Column(name = "quantity")
 	private int quantity;

@@ -3,7 +3,9 @@ package ua.flowerista.shop.services;
 import java.security.Principal;
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import ua.flowerista.shop.dto.AddressDto;
+import ua.flowerista.shop.dto.BouqueteSmallDto;
 import ua.flowerista.shop.dto.user.UserChangePasswordRequestDto;
 import ua.flowerista.shop.dto.user.UserChangePersonalInfoDto;
 import ua.flowerista.shop.dto.user.UserLoginBodyDto;
@@ -22,12 +25,15 @@ import ua.flowerista.shop.dto.user.UserProfileDto;
 import ua.flowerista.shop.dto.user.UserRegistrationBodyDto;
 import ua.flowerista.shop.exceptions.UserAlreadyExistException;
 import ua.flowerista.shop.mappers.AddressMapper;
+import ua.flowerista.shop.mappers.BouqueteMapper;
 import ua.flowerista.shop.mappers.UserMapper;
 import ua.flowerista.shop.models.Address;
+import ua.flowerista.shop.models.Bouquete;
 import ua.flowerista.shop.models.PasswordResetToken;
 import ua.flowerista.shop.models.Role;
 import ua.flowerista.shop.models.User;
 import ua.flowerista.shop.models.VerificationToken;
+import ua.flowerista.shop.repo.BouqueteRepository;
 import ua.flowerista.shop.repo.PasswordResetTokenRepository;
 import ua.flowerista.shop.repo.UserRepository;
 import ua.flowerista.shop.repo.VerificationTokenRepository;
@@ -38,12 +44,18 @@ public class UserService {
 
 	@Autowired
 	private UserRepository repository;
+	
+	@Autowired
+	private BouqueteRepository bouqueteRepository;
 
 	@Autowired
 	private UserMapper mapper;
 
 	@Autowired
 	private AddressMapper addressMapper;
+	
+	@Autowired
+	private BouqueteMapper bouqueteMapper;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -205,6 +217,25 @@ public class UserService {
 		user.setLastName(dto.getLastName());
 		repository.save(user);
 	}
+	
+	public Set<BouqueteSmallDto> getWishList (Principal connectedUser) {
+		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+		return user.getWishlist().stream().map(bouquete -> bouqueteMapper.toSmallDto(bouquete)).collect(Collectors.toSet());
+	}
+	
+	public void addBouqueteToWishList (int id, Principal connectedUser) {
+		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+		Bouquete bouquete = bouqueteRepository.getReferenceById(id);
+		user.getWishlist().add(bouquete);
+		repository.save(user);
+	}
+	
+	public void deleteBouqueteFromWishList (int id, Principal connectedUser) {
+		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+		Bouquete bouquete = bouqueteRepository.getReferenceById(id);
+		user.getWishlist().remove(bouquete);
+		repository.save(user);
+	}	
 
 	private String validatePasswordResetToken(String token) {
 		final PasswordResetToken passToken = passwordTokenRepository.findByToken(token);
