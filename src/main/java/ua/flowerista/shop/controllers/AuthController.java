@@ -2,7 +2,9 @@ package ua.flowerista.shop.controllers;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders;
@@ -101,10 +107,20 @@ public class AuthController {
 	
 	  @PostMapping("/authenticate")
 	  @Operation(summary = "User login endpoint", description = "Returns refresh and access tokens")
-	  public ResponseEntity<UserAuthenticationResponseDto> authenticate(
+	    @ApiResponses(value = {
+	    		@ApiResponse(responseCode = "403",
+				description = "If email or password didnt match"),
+	    		@ApiResponse(responseCode = "200",
+				description = "If data was accepted")
+	    })
+	  public ResponseEntity<?> authenticate(
 	      @RequestBody UserLoginBodyDto request
 	  ) {
-	    return ResponseEntity.ok(authService.authenticate(request));
+		  UserAuthenticationResponseDto response = authService.authenticate(request);
+		  if(response.getAccessToken().equals(null) || response.getRefreshToken().equals(null)) {
+			  return ResponseEntity.badRequest().body("Email or password dont match");
+		  }
+	    return ResponseEntity.ok(response);
 	  }
 	  
 	  @PostMapping("/refresh-token")
@@ -160,6 +176,19 @@ public class AuthController {
 		return ResponseEntity.badRequest().body(response);
 	}
 	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public Map<String, String> handleValidationExceptions(
+	  MethodArgumentNotValidException ex) {
+	    Map<String, String> errors = new HashMap<>();
+	    ex.getBindingResult().getAllErrors().forEach((error) -> {
+	        String fieldName = ((FieldError) error).getField();
+	        String errorMessage = error.getDefaultMessage();
+	        errors.put(fieldName, errorMessage);
+	    });
+	    return errors;
+	}
+	
 	
 	
     private String getAppUrl(HttpServletRequest request) {
@@ -180,5 +209,7 @@ public class AuthController {
         email.setFrom(env.getProperty("support.email"));
         return email;
     }
+    
+    
 
 }
