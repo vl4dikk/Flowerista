@@ -10,14 +10,12 @@ import ua.flowerista.shop.models.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-//	User findByEmail(String email);
-
 	@Query("SELECT COUNT(u) > 0 FROM User u WHERE u.email = :email")
 	boolean existsByEmail(@Param("email") String email);
 
 	@Query("SELECT COUNT(u) > 0 FROM User u WHERE u.phoneNumber = :phoneNumber")
 	boolean existsByPhoneNumber(@Param("phoneNumber") String phoneNumber);
-	
-	 Optional<User> findByEmail(String email);
+
+	Optional<User> findByEmail(String email);
 
 }

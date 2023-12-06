@@ -21,7 +21,7 @@ import ua.flowerista.shop.services.ColorService;
 public class ColorController {
 	
 	@Autowired
-	ColorService service;
+	private ColorService service;
 	
 	@GetMapping
 	@Operation(summary = "Get all collors", description = "Returns list of all colors")
