@@ -21,4 +21,5 @@ public class BouqueteSmallDto {
 	private Integer discount;
 	private Integer discountPrice;
 	private Set<BouqueteSize> sizes;
+	private int stockQuantity;
 }
