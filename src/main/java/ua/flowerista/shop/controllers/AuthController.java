@@ -144,7 +144,7 @@ public class AuthController {
 	@Operation(summary = "Restoring access api", description = "Looks for user with email, and sends letter on email to restore access")
 	public ResponseEntity<?> resetPassword(HttpServletRequest request, @RequestParam("email") String userEmail) {
 		User user = service.findUserByEmail(userEmail);
-		if (user == null) {
+		if (user.getId() == 0) {
 			return ResponseEntity.notFound().build();
 		}
 		String token = UUID.randomUUID().toString();

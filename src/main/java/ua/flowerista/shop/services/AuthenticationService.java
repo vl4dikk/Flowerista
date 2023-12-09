@@ -15,7 +15,6 @@ import ua.flowerista.shop.repo.UserRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.io.IOException;
 public class AuthenticationService {
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
-  private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
