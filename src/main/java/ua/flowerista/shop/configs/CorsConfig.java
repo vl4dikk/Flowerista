@@ -10,8 +10,8 @@ public class CorsConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-		.allowedOrigins("https://flowerista-frontend.vercel.app/", "https://localhost:3000")
-		.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+		.allowedOrigins("https://flowerista-frontend.vercel.app", "http://localhost:3000")
+		.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
 		.allowedHeaders("Content-Type", "Authorization", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin");
 	}
 
