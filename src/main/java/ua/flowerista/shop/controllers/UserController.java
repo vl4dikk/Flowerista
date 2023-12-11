@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,8 @@ import ua.flowerista.shop.dto.AddressDto;
 import ua.flowerista.shop.dto.user.UserChangePasswordRequestDto;
 import ua.flowerista.shop.dto.user.UserChangePersonalInfoDto;
 import ua.flowerista.shop.services.UserService;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequestMapping("/api/user")
@@ -47,8 +50,8 @@ public class UserController {
     		@ApiResponse(responseCode = "200",
 			description = "If user is authenticated")
     })
-	public ResponseEntity<?> profile(Principal connectedUser) {
-		return ResponseEntity.ok(service.getUserDto(connectedUser));
+	public ResponseEntity<?> profile(@RequestHeader(AUTHORIZATION) String token) {
+		return ResponseEntity.ok(service.getUserDto(token));
 	}
 
 	@Operation(summary = "Change password endpoint", description = "Changing authenticated users passwords")

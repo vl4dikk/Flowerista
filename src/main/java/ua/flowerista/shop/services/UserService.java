@@ -68,6 +68,9 @@ public class UserService {
 
 	@Autowired
 	private PasswordResetTokenRepository passwordTokenRepository;
+	
+	@Autowired
+	private JwtService jwtService;
 
 	public static final String TOKEN_INVALID = "invalidToken";
 	public static final String TOKEN_EXPIRED = "expired";
@@ -175,10 +178,11 @@ public class UserService {
 		return "Something went wrong";
 	}
 
-	public UserProfileDto getUserDto(Principal connectedUser) {
-		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-		if (user != null) {
-			return mapper.toProfileDto(repository.findByEmail(user.getEmail()).get());
+	public UserProfileDto getUserDto(String token) {
+		String email = jwtService.extractUsername(token.substring(7));
+		var user = repository.findByEmail(email);
+		if (!user.isEmpty()) {
+			return mapper.toProfileDto(user.get());
 		}
 		return new UserProfileDto();
 	}
